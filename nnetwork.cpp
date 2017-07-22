@@ -61,18 +61,14 @@ void NNetwork::loadWeights()
 //and for hidden neuron 0, all of row 0 connected
 //and for hidden neuron 1, all of column 0 connected etc 
 
-double NNetwork::dotProduct(const bool isRow, const int number) const
+double NNetwork::dotProduct(const int number) const
 {
 	double result = 0.0;
-	if (isRow) {
-		for (int i = 0; i < 100; i++) {
-			result += inputs.at(number * 100 + i) *
-				weightsH.at(number * 200 + i);
-		}
-	} else {
-		for (int i = 0; i < 100; i++) {
-			result += inputs.at(i * 100 + number) *
-				weightsH.at(100 + number * 200 + i);
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 10; j++) {
+			unsigned int node = (number / 10) * 500 +
+				number % 10 * 10 + i * 100 + j;
+			result += inputs.at(node) * weightsH.at(node);
 		}
 	}
 	return result;
@@ -82,15 +78,7 @@ void NNetwork::calculateHiddenValues()
 {
 	outHidden.clear();
 	for (int i = 0; i < 200; i++) {
-		if (i%2 == 0) {
-			//row
-			outHidden.push_back(logistic(dotProduct(true, i/2)
-				+ biasHidden.at(i)));
-		} else {
-			//column
-			outHidden.push_back(logistic(dotProduct(false, i/2)
-				+ biasHidden.at(i)));
-		}
+		outHidden.push_back(logistic(dotProduct(i)));
 	}
 }
 
@@ -249,7 +237,7 @@ void NNetwork::processInputs(const int startRow, const int startCol)
 		for (int j = 0; j < 100; j++) {
 			double jpegValue = jpegBuffer.at(
 				(startRow + i) * widthJPEG + j + startCol);
-			inputs.push_back(jpegValue/2550);
+			inputs.push_back(jpegValue/1000);
 		}
 	}
 }

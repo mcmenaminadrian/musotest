@@ -18,7 +18,7 @@ private:
 	std::vector<uint8_t> jpegBuffer; //representation of JPEG
 	std::vector<uint8_t> copiedBuffer; // copy to mark up with scan scores
 	double logistic(const double& inValue) const;
-	double dotProduct(const bool isRow, const int number) const;
+	double dotProduct(const int number) const;
 	void calculateHiddenValues();
 	void loadJPEG(const std::string& jpegFile);
 	void copyJPEG(const std::string& jpegFile);
